@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<main class="container-fluid mt-2>">
+    <div class="container-fluid">
+        <div class="row">
+          <div class="col"><h5>id</h5></div>
+          <div class="col"><h5>email</h5></div>
+          <div class="col"><h5>last changed</h5></div>
+          <div class="col"></div>
+        </div>
+    </div>
+{% for address in addresses: %}
+    <div class="container-fluid">
+        <div class="row">
+          <div class="col">
+            {{ address.id }}
+          </div>
+          <div class="col">
+            {{ address.email }} 
+          </div>
+          <div class="col">
+            {{ address.datetime }}
+          </div>
+          <div class="col">
+            <a class="btn btn-warning btn-sm" href="{{ url_for('main.edit_email', id=address.id ) }}" role="button">Edit</a>
+            <a class="btn btn-warning btn-sm" href="{{ url_for('main.delete_email', id=address.id ) }}" role="button">Delete</a>
+          </div>
+        </div>
+    </div>
+{% endfor %}
+<a class="btn btn-warning" href="{{ url_for('main.add_email' ) }}" role="button">Add a new address</a>
+</main>
+{% endblock %}

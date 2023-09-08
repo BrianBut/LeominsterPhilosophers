@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="1xrz8lSC5vGlsDtyptToDod2QJcZkFjMoUMzxKRd8Zw" />
+    {% block styles %}
+    {{ bootstrap.load_css() }} 
+    <link href=" https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/cerulean/bootstrap.min.css " rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="/static/mystyles.css" rel="stylesheet">
+    {% endblock %}
+    <title>Leominster Philosophy Group</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg" style="background-color: #87CEEB;">
+      <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler" >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarToggler">
+          <a class="navbar-brand" href="{{ url_for('main.index') }}">Leominster Philosophy Group</a>
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            {% if current_user.is_authenticated %}
+            {% endif %}
+            {% if current_user.is_moderator() %} <!-- start moderator -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle btn-warning" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false">Administration</a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                {% if current_user.is_administrator() %}
+                <li><a class="dropdown-item" href="{{ url_for('main.users') }}">Users</a></li>
+                <li><hr class="dropdown-divider"></li>
+                {% endif %}
+                <li><a class="dropdown-item" href="{{ url_for('main.mailaddresses')}}">Email List</a></li>
+              </ul>
+            </li>
+            {% endif %} <!-- end moderator -->
+            <!--
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">About</a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
+                <li><a class="dropdown-item" href="url_for('helpf.help','about_this_site')">About this Site</a></li>
+              </ul>
+            </li>
+            -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">Help</a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
+                <li><a class="dropdown-item" href="{{url_for('helpf.getting_started')}}">Getting Started</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{{url_for('helpf.code_of_conduct')}}">Code of Conduct</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{{url_for('helpf.register_and_login')}}">Register and Login</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{{url_for('helpf.writing_markdown')}}">Writing Markdown</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{{url_for('helpf.scheduling')}}">Scheduling Meetings and Topics</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <ul class="nav navbar-nav" style="float:right;">
+          {% if current_user.is_authenticated %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ current_user.username }}</a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown3">
+              <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Logout</a></li>
+              <li><a class="nav-link" href="{{ url_for('main.edit_profile') }}">Profile</a></li>
+            </ul>
+          </li>
+          {% else %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown4" role="button" data-bs-toggle="dropdown" aria-expanded="false">Login</a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown4">
+              <li><a class="dropdown-item" href="{{ url_for('auth.login') }}">Login</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('auth.register') }}">Register</a></li>
+            </ul>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+      
+    {% block content %}
+    <main class="container-fluid pt-1">
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages( with_categories=true ) %}
+    {% if messages %}
+    <ul class='list-group list-group-flush'>
+    <!-- categories in ['Success','Info','Warning','Danger']-->
+    {% for category, message in messages %}
+    {% if not category: %} 
+    <li class='list-group-item list-group-item-warning'><strong>{{ message }}</strong></li>
+    {% elif category == 'Warning' %}
+    <li class='list-group-item list-group-item-warning'><strong>{{ message }}</strong></li>
+    {% elif category == 'Danger' %}
+    <li class='list-group-item list-group-item-danger'><strong>{{ message }}</strong></li>
+    {% elif category == 'Success' %}
+    <li class='list-group-item list-group-item-success'><strong>{{ message }}</strong></li>
+    {% elif category == 'Info' %}
+    <li class='list-group-item list-group-item-info'>{{ message }}</li>
+    {% endif %}
+    {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    <!-- Your page content -->
+    {% block page_content %}{% endblock %}
+    {% endblock %}
+    </main>
+    {% block scripts %}
+    {% endblock %}
+  </body>
+</html>

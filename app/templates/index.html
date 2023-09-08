@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block page_content %}
+<!-- Don't forget tt_list is a dict of extended topics -->
+<div class="container-fluid">
+  <div class="text-center">
+    <h2><strong>Coming Meetings</strong></h2>
+  </div>
+  {% for topic_dict in tt_list['future_topics']: %}
+    {% include 'render_topic.html' %}
+  {% endfor %}
+  <div class="text-center">
+    <h2><strong>Past Meetings</strong></h2>
+  </div>
+  {% for topic_dict in tt_list['past_topics']: %}
+    {% include 'render_topic.html' %}
+  {% endfor %}
+
+  <div class="text-center">
+    <h2><strong>Proposed Topics</strong></h2>
+  </div>
+  {% for topic_dict in tt_list['proposed_topics']: %}
+    {% include 'render_topic.html' %}
+  {% endfor %}
+
+  {% if current_user.is_authenticated %}
+  <div class="text-center">
+    <h2><strong>Online Topics</strong></h2>
+  </div>
+  {% for topic_dict in tt_list['online_topics']: %}
+    {% include 'render_topic.html' %}
+  {% endfor %}
+  <div class="container">
+    <a class="btn btn-primary btn-sm m-2" href="{{ url_for('main.newtopic')}}" role="button">Propose a New Topic</a>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}
+
+
+
+{% block scripts %}
+{% endblock %}

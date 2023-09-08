@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% from 'bootstrap5/form.html' import render_form %}
+
+{% block title %}Leominster Philosopy Group - Register{% endblock %}
+
+{% block page_content %}
+<div class="container-sm mt-2">
+    <h1>Register</h1>
+    {{ render_form(form) }}
+</div>
+{% endblock %}

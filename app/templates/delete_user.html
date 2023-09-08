@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% from 'bootstrap5/form.html' import render_form %}
+{% block page_content %}
+
+<main class="container-fluid pt-5>">
+    <div class="container-sm">
+        <h1 class="text-danger">Administrator Delete User</h1>
+        <div class="box">
+            <h3 class="bold text-black">Please be absolutely sure you want to do this!</h3>
+            <h3 class="bold text-danger">There is no going back!</h3>
+        </div>
+    {{ render_form(form) }}
+    </div>
+</main>
+{% endblock %}
+

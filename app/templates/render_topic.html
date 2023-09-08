@@ -1,0 +1,32 @@
+<div class="container mt-3">
+  <div class="card">
+    <div class="card-header text-center">
+      <h4>{{ topic_dict.title }}</h4>
+      {% if not ((topic_dict.discussion_date == 'undecided') or (topic_dict.discussion_date == 'never')) %}
+      <div class="clearfix">
+        <div class="float-end">{{topic_dict.discussion_date}} : {{topic_dict.discussion_time }}</div>
+      </div>
+      {% endif %}
+    </div>
+    <div class="card-body">
+      {{ topic_dict.summary|markdown }}
+      <div class="clearfix">
+        <div class="float-end">
+          {% if topic_dict.discussion_date != 'undecided': %}
+            <small>leader: </small>
+          {% endif %}
+          {{ topic_dict.author_fullname }}
+        </div>
+      </div>
+      <div class="text-right">
+        <a class="btn btn-primary btn-sm m-2" href="{{ url_for('main.topic', topic_id=topic_dict['id'] )}}" role="button">Detail</a>
+        {% if (uid == topic_dict.author_id) or current_user.is_moderator(): %}
+        <a class="btn btn-primary btn-sm m-2" href="{{ url_for('main.edittopic', id=topic_dict['id'] )}}" role="button">Edit</a>
+        {% endif %}
+        {% if (current_user.is_moderator()): %}
+        <a class="btn btn-warning btn-sm m-2" href="{{ url_for('main.setmeetingtime', topic_id=topic_dict['id'] )}}" role="button">Set Time</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>

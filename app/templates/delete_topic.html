@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% from 'bootstrap5/form.html' import render_form %}
+{% block page_content %}
+
+<div><h3>Danger any change here is not reversible!</h3></div>
+<main class="container-fluid>">
+    <div class="container-sm">
+        <h1>Topic for Deletion</h1>
+        {{ render_form(form) }}
+    </div>
+</main>
+{% endblock %}
+

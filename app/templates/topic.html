@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block page_content %}
+
+<div class="container-fluid">
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">{{ topic.title }}</h4>
+      <p class="card-text">{{ topic.summary|markdown }}</p> 
+      <p class="card-text">{{ topic.content|markdown }}</p> 
+      <div class="clearfix">
+        <div class="float-end">proposed by: {{ topic.author_fullname }}</div>
+      </div>
+      <!-- only the owner or moderator can edit a topic -->
+      {% if ( current_user.id == topic.author_id ) or current_user.is_moderator() %}
+        <!-- past topics cannot be edited -->
+        {% if topic.venue in ['proposed','online','planned'] %}
+          <a class="btn btn-primary btn-sm m-2" href="{{ url_for('main.edittopic', id=topic.id )}}" role="button">Edit This Topic</a>
+        {% endif %}
+      {% endif %}
+        <!-- only a moderator can delete or schedule a topic -->
+        {% if current_user.is_moderator() %}
+          <a class="btn btn-danger btn-sm m-2" href="{{ url_for('main.deletetopic', id=topic.id )}}" role="button">Delete This Topic</a>
+          <a class="btn btn-primary btn-sm m-2" href="{{ url_for('admin.setmeetingtime', topic_id=topic.id )}}" role="button">Schedule This Topic</a>
+        {% endif %}
+    </div>
+  </div>
+
+  {% for comment in comments %}
+  <div class="card">
+    <div class="card-body">
+      <div class="card-text"> {{ comment.content|markdown }} </div>
+      <div class="clearfix">
+        <div class="float-end">comment by: {{ comment.author_fullname }}</div>
+      </div>
+      {% if current_user.is_moderator() or (current_user.id==comment.author_id) %}
+        <a class="btn btn-primary btn-sm m-2" href="{{ url_for('main.editcomment', comment_id=comment.id )}}" role="button">Edit This Comment</a>
+      {% endif %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% if current_user.id: %}
+<div class="container">
+  <a class="btn btn-primary btn-sm m-2" href="{{ url_for('main.newcomment', topic_id=topic.id ) }}">Add a new Comment</a>
+</div>
+{% endif %}
+{% endblock %}

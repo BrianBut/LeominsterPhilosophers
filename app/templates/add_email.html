@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% from 'bootstrap5/form.html' import render_form %}
+{% block page_content %}
+
+<main class="container-fluid>">
+    <div class="container-sm">
+        <h1>Add to the Mailing List</h1>
+    {{ render_form(form) }}
+    </div>
+</main>
+{% endblock %}
+

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% from 'bootstrap5/form.html' import render_form %}
+{% block page_content %}
+
+<main class="container-fluid pt-5>">
+    <div class="container-sm">
+        <h1>Edit My Public Information</h1>
+        <p>You have to complete this form before you are allowed to Comment or Contribute to this web site.</p>
+        <p>This information will be used to sign all of your contributions to discussion and any new topics you suggest.</p>
+    {{ render_form(form) }}
+    </div>
+</main>
+{% endblock %}
+

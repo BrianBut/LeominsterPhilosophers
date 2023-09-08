@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% from 'bootstrap5/form.html' import render_form %}
+{% block page_content %}
+<style>
+    label{
+      display: None;
+    }
+</style> 
+<main class="container-fluid>">
+    <div class="container-sm">
+        <h3 >Comment about '{{ topic.title }}'</h3>
+        {{ render_form(form) }}
+    </div>
+</main>
+{% endblock %}
+
