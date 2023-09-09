@@ -4,8 +4,8 @@ from flask_mail import Mail
 from flaskext.markdown import Markdown
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-#import config_production as config
-import config_development as config
+import config_production as config
+#import config_development as config
 #import config_testing as config
 
 bootstrap = Bootstrap5()
