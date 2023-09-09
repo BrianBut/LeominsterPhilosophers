@@ -7,6 +7,17 @@ class Config:
     LP_ADMIN = os.environ.get('LP_ADMIN')
     LP_MAIL_SUBJECT_PREFIX = '[Leominster Philosophers]'
     LP_MAIL_SENDER = 'Phil Leominster <leominsterphil@gmail.com>'
+
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 587
+    MAIL_USE_TLS = True
+    MAIL_USE_SSL = False
+    MAIL_DEBUG = True
+    MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+    MAIL_DEFAULT_SENDER = 'leominsterphil@gmail.com'
+    MAIL_SUPPRESS_SEND = False
+
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = 'sqlite:////home/brian/databases/data-prod.sqlite3'
     @staticmethod
