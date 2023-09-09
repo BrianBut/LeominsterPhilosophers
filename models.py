@@ -104,9 +104,9 @@ class User(UserMixin, db.Model):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-    #def generate_confirmation_token(self, expiration=3600):
-    #    s = Serializer(current_app.config['SECRET_KEY'], str(expiration))
-    #    return s.dumps({'confirm': self.id}).decode('utf-8')
+    def generate_confirmation_token(self, expiration=3600):
+        s = Serializer(current_app.config['SECRET_KEY'], str(expiration))
+        return s.dumps({'confirm': self.id}).decode('utf-8')
 
     def confirm(self, token):
         s = Serializer(current_app.config['SECRET_KEY'])
@@ -121,9 +121,9 @@ class User(UserMixin, db.Model):
         db.session.add(self)
         return True
 
-    #def generate_reset_token(self, expiration=3600):
-    #    s = Serializer(current_app.config['SECRET_KEY'], str(expiration))
-    #    return s.dumps({'reset': self.id}).decode('utf-8')
+    def generate_reset_token(self, expiration=3600):
+        s = Serializer(current_app.config['SECRET_KEY'], str(expiration))
+        return s.dumps({'reset': self.id}).decode('utf-8')
 
     @staticmethod
     def reset_password(token, new_password):
