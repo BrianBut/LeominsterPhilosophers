@@ -11,7 +11,7 @@ class Config:
 
     DEBUG = True
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite://'
+    SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
 
     @staticmethod
     def init_app(app):
