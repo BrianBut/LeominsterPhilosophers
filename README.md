@@ -13,3 +13,9 @@ pip3 install -r requirements
 flask --app lp shell
 db.drop_all()
 db.create_all()
+
+## Test using unit_tests
+flask --app lp test
+
+## Run
+flask --app lp run --debug

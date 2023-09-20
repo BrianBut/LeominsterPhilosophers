@@ -7,4 +7,5 @@ Remove Residual 'Hide' box from 'edit_comment' DONE
 19th September 
 1 Update modules - OK
 2 Add flask 2.3 type configuration -- simple default runs. I've not changed much, but it may be safer to require configuration on installation.
-3 Unit tests run with in_memory database -- started with flask --app lp test
+3 Unit tests run with in_memory database -- started with flask --app lp test - OK
+4 Install flask-migrate to handle migrations

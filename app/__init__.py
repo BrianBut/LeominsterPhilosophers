@@ -3,8 +3,9 @@ from flask import Flask
 from flask_bootstrap import Bootstrap5
 from flask_mail import Mail
 from flaskext.markdown import Markdown
-from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 #import config_production as config
 #import config_development as config
 #import config_testing as config
@@ -49,9 +50,12 @@ def create_app(test_config=None):
     '''
 
     #app.config.from_object(config.Config)
+    db.init_app(app)
+    migrate = Migrate(app, db)
+
     bootstrap.init_app(app)
     mail.init_app(app)
-    db.init_app(app)
+    
     Markdown(app)
     login_manager.init_app(app)
 
