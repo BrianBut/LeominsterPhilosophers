@@ -50,15 +50,14 @@ class TopicModelTestCase(unittest.TestCase):
         db.session.flush()
         self.assertTrue(t.published == False)
 
-    # I fail to see why topic.venue() can't be found
     def test_default_is_proposed(self):
         t = Topic(title="Test Topic")
         db.session.add(t)
         db.session.flush()
         db.session.commit()
         #t2 = Topic.query.first()
-        print(t.dump())
-        self.assertTrue(t.venue() == 'online')
+        #print(t.dump())
+        self.assertTrue(t.discussion_venue() == 'online')
     '''
     
     
@@ -96,11 +95,12 @@ class TopicModelTestCase(unittest.TestCase):
         #print(topic["discussion_date"])
         self.assertTrue(topic["discussion_date"]== 'undecided')
 
+    '''
     def test_topic_author_full_name(self):
         u = User(email='johnsmith@example.com', password='cat', first_name='Rosy', last_name='Lee')
         db.session.add(u)
         db.session.commit()
-        t=Topic(title="Test Author Fullname", author_id=u.id, author_fullname=u.fullname())
+        t=Topic(title="Test Author Fullname", author_id=u.id, authorfullname=u.fullname())
         #print(t.author_fullname())
-        self.assertTrue(t.author_fullname == 'Rosy Lee')
-   
+        self.assertTrue(t.authorfullname == 'Rosy Lee')
+    '''

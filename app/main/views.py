@@ -4,8 +4,8 @@ from flask import render_template, redirect, request, url_for, flash
 from flask_login import current_user, login_required
 from .forms import EditTopicForm, DeleteTopicForm, EditProfileForm, NewCommentForm, EditCommentForm, NewTopicForm, EmailForm, EditUserForm, DeleteUserForm, SetMeetingTimeForm, EditTopicFormDT
 from .. import db
-from ..models import Topic, Role, User, Comment, MailList
-from ..decorators import admin_required, moderator_required
+from ..models import Topic, User, Comment, MailList
+#from ..decorators import admin_required, moderator_required
 from . import main
 
 # helper for index and topics
@@ -197,7 +197,7 @@ def editcomment( comment_id ):
 
 @main.route('/setmeetingtime/<int:topic_id>', methods=['GET','POST'])
 @login_required
-@moderator_required
+#@moderator_required
 def setmeetingtime(topic_id):
     topic = Topic.query.filter_by(id=topic_id).first()
     form = SetMeetingTimeForm( topic_id=topic_id )
@@ -212,7 +212,7 @@ def setmeetingtime(topic_id):
 
 @main.route('/mailaddresses', methods=['GET','POST'])
 @login_required
-@moderator_required
+#@moderator_required
 def mailaddresses():
     addresses = MailList.query.order_by('email').all()
     return render_template("mailaddresses.html", addresses=addresses)
@@ -222,7 +222,7 @@ def mailaddresses():
 
 @main.route('/users', methods=['GET', 'POST'])
 @login_required
-@moderator_required
+#@moderator_required
 def users():
     users = User.query.order_by(User.email).filter(User.id>1).all()
     return render_template("users.html", users=users)
@@ -230,7 +230,7 @@ def users():
 
 @main.route('/admin_edit-user/<int:id>', methods=['GET','POST'])
 @login_required
-@admin_required
+#@admin_required
 def edit_user(id):
     user=User.query.get_or_404(id)
     choices=Role.query.all()
@@ -251,7 +251,7 @@ def edit_user(id):
 
 @main.route('/delete-user/<int:id>', methods=['GET','POST'])
 @login_required
-@admin_required
+#@admin_required
 def delete_user(id):
     #if not current_user.is_administrator():
     #    return render_template('403.html')
@@ -266,7 +266,7 @@ def delete_user(id):
 
 @main.route('/add_email', methods=['GET','POST'])
 @login_required
-@admin_required
+#@admin_required
 def add_email():
     #if not current_user.is_administrator():
     #    return render_template('403.html')
@@ -281,7 +281,7 @@ def add_email():
 
 @main.route('/edit_email/<int:id>', methods=['GET','POST'])
 @login_required
-@admin_required
+#@admin_required
 def edit_email(id):
     #if not current_user.is_administrator():
     #    return render_template('403.html')
@@ -300,7 +300,7 @@ def edit_email(id):
 
 @main.route('/delete_email/<int:id>', methods=['GET','POST'])
 @login_required
-@admin_required
+#@admin_required
 def delete_email(id):
     mail = MailList.query.get_or_404(id)
     db.session.delete(mail)

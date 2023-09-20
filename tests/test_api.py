@@ -3,7 +3,7 @@ import json
 import re
 from base64 import b64encode
 from app import create_app, db
-from app.models import User, Role, Comment
+from app.models import User, Comment
 
 
 class APITestCase(unittest.TestCase):
@@ -12,7 +12,6 @@ class APITestCase(unittest.TestCase):
         self.app_context = self.app.app_context()
         self.app_context.push()
         db.create_all()
-        Role.insert_roles()
         self.client = self.app.test_client()
 
     def tearDown(self):

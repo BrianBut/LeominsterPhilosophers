@@ -19,3 +19,13 @@ flask --app lp test
 
 ## Run
 flask --app lp run --debug
+
+## Using flask-migrate
+# Create a migration repository
+flask db init
+# Perform the initial migration
+flask db migrate -m "Initial migration."
+# Apply the changes
+flask db upgrade
+# Help
+flask db --help

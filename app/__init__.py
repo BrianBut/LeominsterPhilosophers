@@ -6,6 +6,7 @@ from flaskext.markdown import Markdown
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_bcrypt import Bcrypt
 #import config_production as config
 #import config_development as config
 #import config_testing as config
@@ -13,7 +14,7 @@ from flask_migrate import Migrate
 bootstrap = Bootstrap5()
 mail = Mail()
 db = SQLAlchemy()
-
+bcrypt = Bcrypt()
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 
@@ -29,7 +30,8 @@ def create_app(test_config=None):
 
     if test_config == 'testing':
         app.config.from_mapping(
-        SQLALCHEMY_DATABASE_URI="sqlite:///:memory:"
+        SQLALCHEMY_DATABASE_URI="sqlite:///:memory:",
+        TESTING = True
     )
 
     '''
@@ -50,6 +52,8 @@ def create_app(test_config=None):
     '''
 
     #app.config.from_object(config.Config)
+    bcrypt.init_app(app)
+
     db.init_app(app)
     migrate = Migrate(app, db)
 
