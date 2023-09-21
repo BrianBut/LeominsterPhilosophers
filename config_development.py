@@ -7,6 +7,7 @@ class Config:
     LP_ADMIN = os.environ.get('LP_ADMIN')
     LP_MAIL_SUBJECT_PREFIX = '[Leominster Philosophers]'
     LP_MAIL_SENDER = 'Phil Leominster <leominsterphil@gmail.com>'
+    
 
     MAIL_SERVER = 'smtp.gmail.com'
     MAIL_PORT = 587

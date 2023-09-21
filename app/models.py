@@ -1,7 +1,7 @@
 from datetime import datetime
-
+from itsdangerous import URLSafeTimedSerializer
 from flask_login import UserMixin, AnonymousUserMixin
-
+from flask import current_app, request, url_for
 from app import bcrypt, db, login_manager
 
 
@@ -41,6 +41,10 @@ class User(UserMixin, db.Model):
         self.confirmed_on = confirmed_on
         self.first_name = first_name
         self.last_name = last_name
+    
+    def generate_confirmation_token(email):
+        serializer = URLSafeTimedSerializer(current_app.config["SECRET_KEY"])
+        return serializer.dumps(email, salt=current_app.config["SECURITY_PASSWORD_SALT"])
 
     def fullname(self):
         return "{} {}".format(self.first_name, self.last_name).strip()
