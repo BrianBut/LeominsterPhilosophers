@@ -7,9 +7,8 @@ from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
-from decouple import config
 #import config_production as config
-#import config_development as config
+import config_development as config
 #import config_testing as config
 
 bootstrap = Bootstrap5()
@@ -23,13 +22,13 @@ login_manager.login_view = 'auth.login'
 def create_app(test_config=None):
     """Create and configure an instance of the Flask application."""
     app = Flask(__name__, instance_relative_config=True)
-    #app.config.from_mapping(
+    app.config.from_mapping(
         # Some safe defaults for the (development) server to use
-        #SECRET_KEY="dev",
-        #SQLALCHEMY_DATABASE_URI= 'sqlite:///app.db',
-        #SECURITY_PASSWORD_SALT = "SECURITY_PASSWORD_SALT", default="very-important"
-    #)
-    app.config.from_object(config("APP_SETTINGS"))
+        SECRET_KEY="dev",
+        SQLALCHEMY_DATABASE_URI= 'sqlite:///app.db',
+        SECURITY_PASSWORD_SALT ="very-important"
+    )
+    #app.config.from_object(config("APP_SETTINGS"))
 
     if test_config == 'testing':
         app.config.from_mapping(
@@ -38,24 +37,11 @@ def create_app(test_config=None):
     else:
         app.config.from_object(config.Config)
 
-    '''
-    if test_config is None:
-        # load the instance config, if it exists, when not testing
-        app.config.from_pyfile("config.py", silent=True)
-    else:
-        assert(test_config is not None)
-        print("test_config: ",test_config) #prints 'default'
-        # load the test config if passed in
-        app.config.update(test_config)
+    #print('config: ',app.config)
 
-    # ensure the instance folder exists
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
-        pass
-    '''
-
-    bcrypt.init_app(app)
+    
+    bcrypt = Bcrypt(app)
+    #bcrypt.init_app(app)
 
     db.init_app(app)
     migrate = Migrate(app, db)

@@ -1,7 +1,7 @@
 import unittest
 import time
 from datetime import datetime
-from app import create_app, db
+from app import create_app, db, bcrypt
 from app.models import User, AnonymousUser
 
 
@@ -24,14 +24,33 @@ class UserModelTestCase(unittest.TestCase):
     def test_password_salts_are_random(self):
         u = User(email='paws@his.house', password='cat')
         u2 = User(email='paws@his.house', password='cat')
-        self.assertTrue(u.password != u2.password)
+        self.assertTrue(u.password_hash != u2.password_hash)
+
+    def test_bcrypt_setter(self):
+        pw_hash = bcrypt.generate_password_hash('hunter2')
+        self.assertTrue(pw_hash is not None)
     
-    '''
+    def test_bcrypt_is_valid(self):
+        pw_hash = bcrypt.generate_password_hash('hunter2')
+        is_valid = bcrypt.check_password_hash(pw_hash, 'hunter2')
+        self.assertTrue( is_valid )
+
+    def test_bcrypt_is_invalid(self):
+        pw_hash = bcrypt.generate_password_hash('hunter2')
+        is_valid = bcrypt.check_password_hash(pw_hash, 'hanter2')
+        self.assertFalse( is_valid )
+
+    # Test that password_hash gets set by User.init()
+    def test_password_setter(self):
+        u = User(email='paws@his.house', password='cat')
+        self.assertTrue(u.password_hash is not None)
+    
+    # Be sure there is no password attribute
     def test_no_password_getter(self):
         u = User(email='paws@his.house', password='cat')
         with self.assertRaises(AttributeError):
             u.password
-    '''
+    
     '''
     def test_password_verification(self):
         u = User(email='paws@his.house', password='cat')

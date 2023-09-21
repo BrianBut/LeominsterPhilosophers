@@ -18,7 +18,7 @@ class User(UserMixin, db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String, unique=True, nullable=False)
-    password = db.Column(db.String, nullable=False)
+    password_hash = db.Column(db.String, nullable=False)
     created_on = db.Column(db.DateTime, nullable=False)
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
     is_mod = db.Column(db.Boolean, nullable=False, default=False)
@@ -32,7 +32,7 @@ class User(UserMixin, db.Model):
     # TODO COMPLETE
     def __init__( self, email, password, is_admin=False, is_mod=False, is_member=False, is_confirmed=False, confirmed_on=None, first_name=None, last_name=None ):
         self.email = email
-        self.password = bcrypt.generate_password_hash(password)
+        self.password_hash = bcrypt.generate_password_hash(password)
         self.created_on = datetime.now()
         self.is_admin = is_admin
         self.is_mod = is_mod
@@ -41,6 +41,17 @@ class User(UserMixin, db.Model):
         self.confirmed_on = confirmed_on
         self.first_name = first_name
         self.last_name = last_name
+
+    @property
+    def password(self):
+        raise AttributeError('password is not a readable attribute')
+
+    @password.setter
+    def password(self, password):
+        self.password_hash = bcrypt.generate_password_hash(password)
+
+    def verify_password(self, password):
+        return bcrypt.check_password_hash(self.password_hash, password)
     
     def generate_confirmation_token(email):
         serializer = URLSafeTimedSerializer(current_app.config["SECRET_KEY"])
