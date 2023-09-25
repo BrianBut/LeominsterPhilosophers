@@ -51,29 +51,68 @@ class UserModelTestCase(unittest.TestCase):
         with self.assertRaises(AttributeError):
             u.password
     
-    '''
+    # Password verification works
     def test_password_verification(self):
         u = User(email='paws@his.house', password='cat')
         self.assertTrue(u.verify_password('cat'))
         self.assertFalse(u.verify_password('dog'))
+
+    '''
+    def test_valid_confirmation_token(self):
+        u = User(email='paws@his.house',  password='cat')
+        db.session.add(u)
+        db.session.commit()
+        token = u.generate_confirmation_token(u.email)
+        #print('token: ',token)
+        self.assertTrue(u.confirm_token(token) == 'paws@his.house')
+        #print('confirm_token: ', u.confirm_token(token))
+        self.assertFalse(u.confirm_token(token) == 'paws@my.house')
     '''
 
+    def test_valid_timed_confirmation_token(self):
+        u = User(email='paws@his.house',  password='cat')
+        db.session.add(u)
+        db.session.commit()
+        token = u.generate_timed_confirmation_token(u.email)
+        print('timed token: ',token)
+        self.assertTrue(u.confirm(token) == 'paws@his.house')
+        print('confirm_timed_token: ', u.confirm(token))
+        self.assertFalse(u.confirm(token) == 'paws@my.house')
+
+    def test_invalid_timed_confirmation_token(self):
+        u1 = User(email='paws@his.house', password='cat')
+        u2 = User(email='yapicrudi@horrible.house', password='dog')
+        db.session.add(u1)
+        db.session.add(u2)
+        db.session.commit()
+        token = u1.generate_timed_confirmation_token(u1.email)
+        self.assertFalse(u2.confirm(u1.email))
+
+    def test_expired_timed_confirmation_token(self):
+        u = User(email='tiny@bath', password='cat')
+        db.session.add(u)
+        db.session.commit()
+        token = u.generate_timed_confirmation_token(u.email)
+        time.sleep(2)
+        self.assertFalse(u.confirm(token,1))
+    
+    #TODO
     '''
     def test_invalid_reset_token(self):
         u = User(email='cat@my.bed', password='cat')
         db.session.add(u)
         db.session.commit()
-        token = u.generate_reset_token()
-        self.assertFalse(User.reset_password(token + 'a', 'horse'))
-        self.assertTrue(u.verify_password('cat'))
+        reset = u.generate_reset_token('dog')
+        print('reset_token', reset) # prints the encrypted token
+        self.assertTrue(User.reset_password(reset, 'dog'))
+        self.assertFalse(User.reset_password(reset, 'cat'))
+        self.assertFalse(User.reset_password(reset, 'horse'))
     '''
-
-    
+        
     def test_anonymous_user(self):
         u = AnonymousUser()
         self.assertFalse(u.is_administrator())
         self.assertFalse(u.is_moderator())
-
 
     def test_timestamp(self):
         u = User( email='paws@his.house', password='cat')
@@ -82,6 +121,7 @@ class UserModelTestCase(unittest.TestCase):
         self.assertTrue(
             (datetime.utcnow() - u.last_seen).total_seconds() < 3)
 
+    # TODO
     '''
     def test_ping(self):
         u = User( email='paws@his.house', password='cat')
@@ -92,10 +132,10 @@ class UserModelTestCase(unittest.TestCase):
         u.ping()
         self.assertTrue(u.last_seen > last_seen_before)
     '''
+
     def test_is_administrator(self):
         u = User(email='john@example.com', password='cat')
         self.assertFalse( u.is_administrator() )
-
         u = User(email='jill@example.com', password='cat', is_admin=True)
         self.assertTrue( u.is_administrator() )
     

@@ -10,3 +10,5 @@ Remove Residual 'Hide' box from 'edit_comment' DONE
 3 Unit tests run with in_memory database -- started with flask --app lp test - OK
 4 Install flask-migrate to handle migrations can create database - not so sure about migrations
 5 Supply  'generate_confirmation_token'
+  This has proved problematic and is as yet undone. For the time being we will rely on the administrator to reset passwords
+  

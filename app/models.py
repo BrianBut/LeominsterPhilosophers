@@ -1,5 +1,5 @@
 from datetime import datetime
-from itsdangerous import URLSafeTimedSerializer
+from itsdangerous import URLSafeSerializer, URLSafeTimedSerializer
 from flask_login import UserMixin, AnonymousUserMixin
 from flask import current_app, request, url_for
 from app import bcrypt, db, login_manager
@@ -52,10 +52,67 @@ class User(UserMixin, db.Model):
 
     def verify_password(self, password):
         return bcrypt.check_password_hash(self.password_hash, password)
+
+    # Next pair of functions generate confirmation tokens with timestamp
+    def generate_timed_confirmation_token(self, email):
+        serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+        return serializer.dumps(email, salt=current_app.config['SECURITY_PASSWORD_SALT'])
+
+    #def confirm_timed_token(self, token, expiration=3600):
+    def confirm(self, token, expiration=3600):
+        serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+        try:
+            email = serializer.loads(
+                token,
+                salt=current_app.config['SECURITY_PASSWORD_SALT'],
+                max_age=expiration
+            )
+        except:
+            return False
+        return email
     
-    def generate_confirmation_token(email):
-        serializer = URLSafeTimedSerializer(current_app.config["SECRET_KEY"])
-        return serializer.dumps(email, salt=current_app.config["SECURITY_PASSWORD_SALT"])
+    # Fails change password 
+    def generate_reset_token(self, expiration=3600):
+        serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'], expiration)
+        return serializer.dumps({'reset': self.id},salt=current_app.config['SECURITY_PASSWORD_SALT'])
+
+    @staticmethod
+    def reset_password(token, new_password, expiration=3600):
+        s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+        try:
+            id = s.loads(
+                token,
+                salt=current_app.config['SECURITY_PASSWORD_SALT'],
+                max_age=expiration
+                )
+        except:
+            print("'reset_password' data not loaded")
+            return False
+        print("token is: ",id)
+        user = User.query.get('token')
+        print("id is:", user.id)
+        if user is None:
+            return False
+        user.password = new_password
+        db.session.add(user)
+        return True
+    
+    #From flasky
+    #@staticmethod
+    #def reset_password(token, new_password):
+    '''
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token.encode('utf-8'))
+        except:
+            return False
+        user = User.query.get(data.get('reset'))
+        if user is None:
+            return False
+        user.password = new_password
+        db.session.add(user)
+        return True
+    '''
 
     def fullname(self):
         return "{} {}".format(self.first_name, self.last_name).strip()
