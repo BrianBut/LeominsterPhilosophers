@@ -73,7 +73,7 @@ class UserModelTestCase(unittest.TestCase):
         u = User(email='paws@his.house',  password='cat')
         db.session.add(u)
         db.session.commit()
-        token = u.generate_timed_confirmation_token(u.email)
+        token = u.generate_confirmation_token(u.email)
         print('timed token: ',token)
         self.assertTrue(u.confirm(token) == 'paws@his.house')
         print('confirm_timed_token: ', u.confirm(token))
@@ -85,14 +85,14 @@ class UserModelTestCase(unittest.TestCase):
         db.session.add(u1)
         db.session.add(u2)
         db.session.commit()
-        token = u1.generate_timed_confirmation_token(u1.email)
+        token = u1.generate_confirmation_token(u1.email)
         self.assertFalse(u2.confirm(u1.email))
 
     def test_expired_timed_confirmation_token(self):
         u = User(email='tiny@bath', password='cat')
         db.session.add(u)
         db.session.commit()
-        token = u.generate_timed_confirmation_token(u.email)
+        token = u.generate_confirmation_token(u.email)
         time.sleep(2)
         self.assertFalse(u.confirm(token,1))
     
@@ -144,7 +144,7 @@ class UserModelTestCase(unittest.TestCase):
         self.assertFalse( u.is_administrator() )
         self.assertTrue( u.is_moderator() )
         self.assertFalse( u.is_member )
-        self.assertFalse( u.is_confirmed )
+        self.assertFalse( u.confirmed )
 
     def test_is_member(self):
         u = User(email='john@example.com', password='cat', is_member=True)

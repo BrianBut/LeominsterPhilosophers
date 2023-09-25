@@ -23,7 +23,7 @@ class User(UserMixin, db.Model):
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
     is_mod = db.Column(db.Boolean, nullable=False, default=False)
     is_member = db.Column(db.Boolean, nullable=False, default=False)
-    is_confirmed = db.Column(db.Boolean, nullable=False, default=False)
+    confirmed = db.Column(db.Boolean, nullable=False, default=False)
     confirmed_on = db.Column(db.DateTime, nullable=True)
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     first_name = db.Column(db.String(32), )
@@ -37,7 +37,7 @@ class User(UserMixin, db.Model):
         self.is_admin = is_admin
         self.is_mod = is_mod
         self.is_member = is_member
-        self.is_confirmed = is_confirmed
+        self.confirmed = is_confirmed
         self.confirmed_on = confirmed_on
         self.first_name = first_name
         self.last_name = last_name
@@ -54,7 +54,7 @@ class User(UserMixin, db.Model):
         return bcrypt.check_password_hash(self.password_hash, password)
 
     # Next pair of functions generate confirmation tokens with timestamp
-    def generate_timed_confirmation_token(self, email):
+    def generate_confirmation_token(self, email):
         serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
         return serializer.dumps(email, salt=current_app.config['SECURITY_PASSWORD_SALT'])
 
@@ -124,7 +124,7 @@ class User(UserMixin, db.Model):
         return self.is_admin
     
     def ping(self):
-        self.last_seen = datetime.utcnow
+        self.last_seen = datetime.utcnow()
         db.session.add(self)
 
     def __repr__(self):

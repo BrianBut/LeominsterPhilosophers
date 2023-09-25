@@ -14,8 +14,8 @@ class Config:
     MAIL_USE_TLS = True
     MAIL_USE_SSL = False
     MAIL_DEBUG = True
-    MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
-    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+    MAIL_USERNAME = 'leominsterphil@gmail.com'
+    MAIL_PASSWORD = 'eolo xotp gxib hdki'
     MAIL_DEFAULT_SENDER = 'leominsterphil@gmail.com'
     MAIL_SUPPRESS_SEND = False
 

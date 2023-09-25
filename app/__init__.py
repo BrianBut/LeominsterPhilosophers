@@ -9,7 +9,6 @@ from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
 #import config_production as config
 import config_development as config
-#import config_testing as config
 
 bootstrap = Bootstrap5()
 mail = Mail()
@@ -41,7 +40,6 @@ def create_app(test_config=None):
 
     
     bcrypt = Bcrypt(app)
-    #bcrypt.init_app(app)
 
     db.init_app(app)
     migrate = Migrate(app, db)
