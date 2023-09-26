@@ -57,23 +57,53 @@ class UserModelTestCase(unittest.TestCase):
         self.assertTrue(u.verify_password('cat'))
         self.assertFalse(u.verify_password('dog'))
 
-    '''
+    # tests from flasky
     def test_valid_confirmation_token(self):
-        u = User(email='paws@his.house',  password='cat')
+        u = User(email='cookie@the.house.next.door',password='cat')
         db.session.add(u)
         db.session.commit()
-        token = u.generate_confirmation_token(u.email)
-        #print('token: ',token)
-        self.assertTrue(u.confirm_token(token) == 'paws@his.house')
-        #print('confirm_token: ', u.confirm_token(token))
-        self.assertFalse(u.confirm_token(token) == 'paws@my.house')
-    '''
+        token = u.generate_confirmation_token()
+        self.assertTrue(u.confirm(token))
+
+    def test_invalid_confirmation_token(self):
+        u1 = User(password='cat')
+        u2 = User(password='dog')
+        db.session.add(u1)
+        db.session.add(u2)
+        db.session.commit()
+        token = u1.generate_confirmation_token()
+        self.assertFalse(u2.confirm(token))
+
+    def test_expired_confirmation_token(self):
+        u = User(password='cat')
+        db.session.add(u)
+        db.session.commit()
+        token = u.generate_confirmation_token()
+        time.sleep(2)
+        self.assertFalse(u.confirm(token))
+
+    def test_valid_reset_token(self):
+        u = User(email='paws@his.house', password='cat')
+        db.session.add(u)
+        db.session.commit()
+        token = u.generate_reset_token()
+        print( 'reset_token: ',token )
+        self.assertTrue(User.reset_password(token, 'dog'))
+        self.assertTrue(u.verify_password('dog'))
+
+    def test_invalid_reset_token(self):
+        u = User(email='cookie@next.door', password='cat')
+        db.session.add(u)
+        db.session.commit()
+        token = u.generate_reset_token()
+        self.assertFalse(User.reset_password(token + 'a', 'horse'))
+        self.assertTrue(u.verify_password('cat'))
 
     def test_valid_timed_confirmation_token(self):
         u = User(email='paws@his.house',  password='cat')
         db.session.add(u)
         db.session.commit()
-        token = u.generate_confirmation_token(u.email)
+        token = u.generate_confirmation_token()
         print('timed token: ',token)
         self.assertTrue(u.confirm(token) == 'paws@his.house')
         print('confirm_timed_token: ', u.confirm(token))
@@ -85,14 +115,14 @@ class UserModelTestCase(unittest.TestCase):
         db.session.add(u1)
         db.session.add(u2)
         db.session.commit()
-        token = u1.generate_confirmation_token(u1.email)
+        token = u1.generate_confirmation_token()
         self.assertFalse(u2.confirm(u1.email))
 
     def test_expired_timed_confirmation_token(self):
         u = User(email='tiny@bath', password='cat')
         db.session.add(u)
         db.session.commit()
-        token = u.generate_confirmation_token(u.email)
+        token = u.generate_confirmation_token()
         time.sleep(2)
         self.assertFalse(u.confirm(token,1))
     

@@ -32,6 +32,7 @@ def create_app(test_config=None):
     if test_config == 'testing':
         app.config.from_mapping(
         SQLALCHEMY_DATABASE_URI="sqlite:///:memory:",
+        LP_ADMIN='administrator@example.com',
         TESTING = True ) 
     else:
         app.config.from_object(config.Config)

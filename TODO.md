@@ -12,3 +12,6 @@ Remove Residual 'Hide' box from 'edit_comment' DONE
 5 Supply  'generate_confirmation_token'
   This has proved problematic and is as yet undone. For the time being we will rely on the administrator to reset passwords
   
+26th September
+Confirmation email wording - not complete
+Revert to flasky naming to ease debugging issues. Username?

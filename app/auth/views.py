@@ -62,10 +62,13 @@ def register():
     return render_template('auth/register.html', form=form)
 
 
+# This checks the recieved token input
 @auth.route('/confirm/<token>')
 @login_required
 def confirm(token):
+    print('Confirm token recieved')
     if current_user.confirmed:
+        print('Confirm token not needed as current_user is already confirmed')
         return redirect(url_for('main.index'))
     if current_user.confirm(token):
         db.session.commit()
@@ -75,6 +78,7 @@ def confirm(token):
     return redirect(url_for('main.index'))
 
 
+# This generates a token which is emailed to the user
 @auth.route('/confirm')
 @login_required
 def resend_confirmation():

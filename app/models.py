@@ -17,31 +17,22 @@ class User(UserMixin, db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String, unique=True, nullable=False)
+    email = db.Column(db.String, unique=True, index=True)
     password_hash = db.Column(db.String, nullable=False)
-    created_on = db.Column(db.DateTime, nullable=False)
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
     is_mod = db.Column(db.Boolean, nullable=False, default=False)
     is_member = db.Column(db.Boolean, nullable=False, default=False)
     confirmed = db.Column(db.Boolean, nullable=False, default=False)
     confirmed_on = db.Column(db.DateTime, nullable=True)
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
-    first_name = db.Column(db.String(32), )
+    first_name = db.Column(db.String(32))
     last_name = db.Column(db.String(32))
-    
-    # TODO COMPLETE
-    def __init__( self, email, password, is_admin=False, is_mod=False, is_member=False, is_confirmed=False, confirmed_on=None, first_name=None, last_name=None ):
-        self.email = email
-        self.password_hash = bcrypt.generate_password_hash(password)
-        self.created_on = datetime.now()
-        self.is_admin = is_admin
-        self.is_mod = is_mod
-        self.is_member = is_member
-        self.confirmed = is_confirmed
-        self.confirmed_on = confirmed_on
-        self.first_name = first_name
-        self.last_name = last_name
 
+    def __init__(self, **kwargs):
+        super(User, self).__init__(**kwargs)
+        if self.email == current_app.config['LP_ADMIN']:
+            self.is_admin=True
+        
     @property
     def password(self):
         raise AttributeError('password is not a readable attribute')
@@ -54,11 +45,10 @@ class User(UserMixin, db.Model):
         return bcrypt.check_password_hash(self.password_hash, password)
 
     # Next pair of functions generate confirmation tokens with timestamp
-    def generate_confirmation_token(self, email):
+    def generate_confirmation_token(self):
         serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
-        return serializer.dumps(email, salt=current_app.config['SECURITY_PASSWORD_SALT'])
+        return serializer.dumps(self.email, salt=current_app.config['SECURITY_PASSWORD_SALT'])
 
-    #def confirm_timed_token(self, token, expiration=3600):
     def confirm(self, token, expiration=3600):
         serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
         try:
@@ -71,27 +61,27 @@ class User(UserMixin, db.Model):
             return False
         return email
     
-    # Fails change password 
     def generate_reset_token(self, expiration=3600):
         serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'], expiration)
-        return serializer.dumps({'reset': self.id},salt=current_app.config['SECURITY_PASSWORD_SALT'])
+        return serializer.dumps({'id': self.id},salt=current_app.config['SECURITY_PASSWORD_SALT'])
 
     @staticmethod
     def reset_password(token, new_password, expiration=3600):
-        s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+        serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+        print("token is: ",token)
         try:
-            id = s.loads(
+            id = serializer.loads(
                 token,
                 salt=current_app.config['SECURITY_PASSWORD_SALT'],
                 max_age=expiration
                 )
         except:
-            print("'reset_password' data not loaded")
             return False
-        print("token is: ",id)
-        user = User.query.get('token')
-        print("id is:", user.id)
-        if user is None:
+        
+        print("id is:", id)
+        user = User.query.get(id)
+        print("user: ",user.id)
+        if user.id is None:
             return False
         user.password = new_password
         db.session.add(user)
