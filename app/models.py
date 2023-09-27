@@ -30,10 +30,12 @@ class User(UserMixin, db.Model):
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
+        #print( 'user.email: ',self.email)
+        #print('LP_ADMIN: ',current_app.config['LP_ADMIN'])
         if self.email == current_app.config['LP_ADMIN']:
             self.admin=True
-            self.mod=True
-            self.is_member=True
+            self.moderator=True
+            self.member=True
         
     @property
     def password(self):

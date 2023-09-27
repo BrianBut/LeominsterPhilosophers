@@ -16,3 +16,7 @@ Remove Residual 'Hide' box from 'edit_comment' DONE
 Confirmation email wording - not complete. How to apply config constants to templates?
 Revert to flasky naming to ease debugging issues. OK
 Make flash messages work. OK
+Work on admin registration OK?
+Tests for admin registration
+
+
