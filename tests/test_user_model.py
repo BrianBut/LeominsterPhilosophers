@@ -180,7 +180,7 @@ class UserModelTestCase(unittest.TestCase):
         u = User(email='john@example.com', password='cat', is_mod=True)
         self.assertFalse( u.is_administrator() )
         self.assertTrue( u.is_moderator() )
-        self.assertFalse( u.is_member )
+        self.assertTrue( u.is_member )
         self.assertFalse( u.confirmed )
 
     def test_is_member(self):

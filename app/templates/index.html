@@ -22,7 +22,7 @@
     {% include 'render_topic.html' %}
   {% endfor %}
 
-  {% if current_user.is_authenticated %}
+  {% if current_user.is_member %}
   <div class="text-center">
     <h2><strong>Online Topics</strong></h2>
   </div>

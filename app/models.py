@@ -19,9 +19,9 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String, unique=True, index=True)
     password_hash = db.Column(db.String, nullable=False)
-    is_admin = db.Column(db.Boolean, nullable=False, default=False)
-    is_mod = db.Column(db.Boolean, nullable=False, default=False)
-    is_member = db.Column(db.Boolean, nullable=False, default=False)
+    admin = db.Column(db.Boolean, nullable=False, default=False)
+    moderator = db.Column(db.Boolean, nullable=False, default=False)
+    member = db.Column(db.Boolean, nullable=False, default=False)
     confirmed = db.Column(db.Boolean, nullable=False, default=False)
     confirmed_on = db.Column(db.DateTime, nullable=True)
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
@@ -31,7 +31,9 @@ class User(UserMixin, db.Model):
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
         if self.email == current_app.config['LP_ADMIN']:
-            self.is_admin=True
+            self.admin=True
+            self.mod=True
+            self.is_member=True
         
     @property
     def password(self):
@@ -94,11 +96,14 @@ class User(UserMixin, db.Model):
     def fullname(self):
         return "{} {}".format(self.first_name, self.last_name).strip()
     
+    def is_member(self):
+        return self.member
+    
     def is_moderator(self):
-        return self.is_mod
+        return self.moderator
     
     def is_administrator(self):
-        return self.is_admin
+        return self.admin
     
     def ping(self):
         self.last_seen = datetime.utcnow()
@@ -109,6 +114,9 @@ class User(UserMixin, db.Model):
     
 
 class AnonymousUser(AnonymousUserMixin):
+
+    def is_member(self):
+        return False
     
     def is_moderator(self):
         return False

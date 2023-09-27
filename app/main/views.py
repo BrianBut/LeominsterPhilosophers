@@ -48,7 +48,7 @@ def edit_profile():
     form = EditProfileForm()
     if form.validate_on_submit():
         if form.continu.data:
-            return redirect(url_for('main.index'))
+            return redirect(url_for('.index'))
         user.first_name = form.first_name.data
         user.last_name = form.last_name.data
         db.session.add(user)
@@ -62,17 +62,15 @@ def edit_profile():
 @main.route('/newtopic', methods=['GET', 'POST'])
 @login_required
 def newtopic():
-    if not current_user.has_valid_profile():
-        flash(category='Danger', message='You must complete your profile (so we can see who is proposing a new topic)')
-        return redirect( url_for('main.edit_profile'))
-    
+    if not current_user.is_member:
+        return render_template('403.html')
     form=NewTopicForm()
     if request.method == 'POST' and form.validate():
         topic=Topic(title=form.title.data, summary=form.summary.data, author_id=current_user.id, author_fullname=current_user.fullname(), published=False)
         db.session.add(topic)
         db.session.commit()
-        return redirect(url_for('.topics'))
-    return render_template('topics.html',form=form)
+        return redirect(url_for('.index'))
+    return render_template('newtopic.html',form=form)
 
 
 # The user is allowed to choose between 'Online or proposed' venues
