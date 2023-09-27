@@ -14,4 +14,5 @@ Remove Residual 'Hide' box from 'edit_comment' DONE
   
 26th September
 Confirmation email wording - not complete
-Revert to flasky naming to ease debugging issues. Username?
+Revert to flasky naming to ease debugging issues. OK
+Make flash messages work. OK

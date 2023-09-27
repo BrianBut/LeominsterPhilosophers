@@ -49,6 +49,7 @@ class User(UserMixin, db.Model):
         serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
         return serializer.dumps(self.email, salt=current_app.config['SECURITY_PASSWORD_SALT'])
 
+    '''
     def confirm(self, token, expiration=3600):
         serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
         try:
@@ -60,6 +61,23 @@ class User(UserMixin, db.Model):
         except:
             return False
         return email
+    '''
+    
+    def confirm(self, token, expiration=3600):
+        s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+        try:
+            email = s.loads(
+                token,
+                salt=current_app.config['SECURITY_PASSWORD_SALT'],
+                max_age=expiration
+            )
+        except:
+            return False
+        if email != self.email:
+            return False
+        self.confirmed = True
+        db.session.add(self)
+        return True
     
     def generate_reset_token(self, expiration=3600):
         serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'], expiration)
@@ -86,23 +104,6 @@ class User(UserMixin, db.Model):
         user.password = new_password
         db.session.add(user)
         return True
-    
-    #From flasky
-    #@staticmethod
-    #def reset_password(token, new_password):
-    '''
-        s = Serializer(current_app.config['SECRET_KEY'])
-        try:
-            data = s.loads(token.encode('utf-8'))
-        except:
-            return False
-        user = User.query.get(data.get('reset'))
-        if user is None:
-            return False
-        user.password = new_password
-        db.session.add(user)
-        return True
-    '''
 
     def fullname(self):
         return "{} {}".format(self.first_name, self.last_name).strip()

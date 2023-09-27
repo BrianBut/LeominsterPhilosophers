@@ -133,7 +133,7 @@ def deletetopic(id):
             db.session.delete(comment)
         db.session.delete(topic) 
         db.session.commit()
-        flash( category='information', message='topic and all its comments deleted')
+        flash( category='Info', message='topic and all its comments deleted')
         return redirect(url_for('.topics'))
     print('Summary: {}'.format(topic.summary))
     form.summary.data=topic.summary
