@@ -13,6 +13,6 @@ Remove Residual 'Hide' box from 'edit_comment' DONE
   This has proved problematic and is as yet undone. For the time being we will rely on the administrator to reset passwords
   
 26th September
-Confirmation email wording - not complete
+Confirmation email wording - not complete. How to apply config constants to templates?
 Revert to flasky naming to ease debugging issues. OK
 Make flash messages work. OK
