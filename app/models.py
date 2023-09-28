@@ -6,10 +6,16 @@ from app import bcrypt, db, login_manager
 
 
 class MailList(db.Model):
-    __tablename__ = 'mailist'
+    __tablename__ = 'maillist'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(64), unique=True, index=True)
     datetime = db.Column(db.DateTime, default=datetime.utcnow)
+
+    @staticmethod
+    def is_member(email):
+        approved = MailList.query.filter_by(email=email).first()
+        #print('approved is: ',approved)
+        return approved
 
 
 class User(UserMixin, db.Model):

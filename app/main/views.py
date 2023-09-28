@@ -26,9 +26,9 @@ def get_topics():
     elif tt['venue'] == 'past':
         tl['past_topics'].append(tt)
     else: 
-        print('venue is:', tt['venue'])
+        #print('venue is:', tt['venue'])
         raise Exception("get_topics failed to find venue") 
-    print(topic.discussion_datetime.strftime('%s'), tt['venue'] )
+    #print(topic.discussion_datetime.strftime('%s'), tt['venue'] )
   return tl
 
 
@@ -94,7 +94,7 @@ def edittopic(id):
             topic.published=int(form.published.data)    # requires a boolean value
             if topic.published:
                 topic.discussion_datetime=datetime.max
-            print("topic.published set to {} ([(0,'Online Only'), (1,'Propose')])".format(topic.published))
+            #print("topic.published set to {} ([(0,'Online Only'), (1,'Propose')])".format(topic.published))
             db.session.add(topic)
             db.session.commit()
             return redirect(url_for('.index'))
@@ -133,7 +133,7 @@ def deletetopic(id):
         db.session.commit()
         flash( category='Info', message='topic and all its comments deleted')
         return redirect(url_for('.topics'))
-    print('Summary: {}'.format(topic.summary))
+    #print('Summary: {}'.format(topic.summary))
     form.summary.data=topic.summary
     form.title.data=topic.title
     return render_template('delete_topic.html',form=form)
@@ -155,10 +155,6 @@ def topic(topic_id):
 @main.route('/newcomment/<int:topic_id>', methods=['GET','POST'])
 @login_required
 def newcomment(topic_id):
-    if not current_user.has_valid_profile():
-        flash(category='Danger', message='You must complete your profile (so we can see who is commenting)')
-        return redirect( url_for('main.edit_profile'))
-
     topic=Topic.query.get_or_404(topic_id)
     comment = Comment( topic_id=topic.id, author_id=current_user.id, author_fullname=current_user.fullname() )
     form = NewCommentForm(comment=comment)
@@ -232,7 +228,7 @@ def users():
 def edit_user(id):
     user=User.query.get_or_404(id)
     choices=Role.query.all()
-    print("choices: ",choices)
+    #print("choices: ",choices)
     form = EditUserForm(user=user)
     form.choices=choices
     if request.method == 'POST' and form.validate():

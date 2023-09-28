@@ -2,7 +2,7 @@ from flask import render_template, redirect, request, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from . import auth
 from .. import db
-from ..models import User
+from ..models import User, MailList
 from ..email import send_email
 from .forms import LoginForm, RegistrationForm, ChangePasswordForm, PasswordResetRequestForm, PasswordResetForm, ChangeEmailForm
         
@@ -31,7 +31,20 @@ def login():
         user = User.query.filter_by(email=form.email.data.lower()).first()
         if user is not None and user.verify_password(form.password.data):
             login_user(user, form.remember_me.data)
-            # check confirmation at this point
+            # check membership and privileges at this point
+            member_status1 = user.member
+            user.member = False
+            if MailList.is_member(user.email) or user.admin:
+                #print("User is on the maillist")
+                user.member = True
+            else:
+                #print("User is not on the maillist")
+                flash(category='Info', message='Welcome as a guest. You can read what other users have written, but you cannot comment or propose a topic until you are on the mailing list of our philosopy group')
+            #print('user.member: ',user.member)
+            if user.member != member_status1:
+                flash(category='Warning', message='You are no longer on our membership list')
+            db.session.add(user)
+            #db.session.commit()
             next = request.args.get('next')
             if next is None or not next.startswith('/'):
                 next = url_for('main.index')
