@@ -63,27 +63,26 @@ class UserModelTestCase(unittest.TestCase):
         db.session.add(u)
         db.session.commit()
         token = u.generate_confirmation_token()
+        print("token: ",token)
         self.assertTrue(u.confirm(token))
 
-    '''
     def test_invalid_confirmation_token(self):
-        u1 = User(password='cat')
-        u2 = User(password='dog')
+        u1 = User(email='cookie@the.house.next.door', password='cat')
+        u2 = User(email='boo@the.house.next.door', password='dog')
         db.session.add(u1)
         db.session.add(u2)
         db.session.commit()
         token = u1.generate_confirmation_token()
+        print("token: ",token)
         self.assertFalse(u2.confirm(token))
-    '''
-    '''
+
     def test_expired_confirmation_token(self):
-        u = User(password='cat')
+        u = User(email='cookie@the.house.next.door', password='cat')
         db.session.add(u)
         db.session.commit()
-        u.generate_confirmation_token()
+        token = u.generate_confirmation_token()
         time.sleep(2)
-        self.assertFalse(u.verify_password('cat'))
-    '''
+        self.assertFalse(u.confirm(token, expiration=1))
 
     def test_valid_reset_token(self):
         u = User(email='paws@his.house', password='cat')
@@ -172,15 +171,19 @@ class UserModelTestCase(unittest.TestCase):
 
     def test_is_administrator(self):
         u = User(email='john@example.com', password='cat')
+        self.assertFalse( u.admin )
+        self.assertFalse( u.moderator )
+        self.assertFalse( u.member)
+        self.assertFalse( u.confirmed )
         self.assertFalse( u.is_administrator() )
-        u = User(email='jill@example.com', password='cat', is_admin=True)
+        u = User(email='jill@example.com', password='cat', admin=True)
         self.assertTrue( u.is_administrator() )
     
     def test_is_moderator(self):
-        u = User(email='john@example.com', password='cat', is_mod=True)
+        u = User(email='john@example.com', password='cat', moderator=True)
         self.assertFalse( u.is_administrator() )
         self.assertTrue( u.is_moderator() )
-        self.assertTrue( u.is_member )
+        #self.assertTrue( u.is_member() ) #TODO?
         self.assertFalse( u.confirmed )
 
     def test_is_member(self):
@@ -194,21 +197,6 @@ class UserModelTestCase(unittest.TestCase):
         self.assertTrue( u.fullname() == 'Rosy Lee')
 
     '''
-    def test_has_valid_profile(self):
-        r = Role.query.filter_by(name='User').first()
-        u1 = User(email='johnsmith@example.com', password='cat', first_name='Rosy', last_name='Lee', role=r)
-        self.assertTrue( u1.has_valid_profile() )
-        u2 = User(email='john@example.com', password='cat', first_name='R', last_name='L')
-        self.assertFalse( u2.has_valid_profile() )
-
-    def test_no_profile_is_invalid(self):
-        u = User(email='john@example.com', password='cat')
-        print(u.first_name)
-        print(u.last_name)
-        print(u.fullname())
-        self.assertFalse( u.has_valid_profile() )
-    '''
-'''
     def test_to_json(self):
         u = User(email='john@example.com', password='cat')
         db.session.add(u)
@@ -218,4 +206,4 @@ class UserModelTestCase(unittest.TestCase):
         expected_keys = ['url', 'username', 'member_since', 'last_seen']
         self.assertEqual(sorted(json_user.keys()), sorted(expected_keys))
         self.assertEqual('/api/v1/users/' + str(u.id), json_user['url'])
-'''
+    '''

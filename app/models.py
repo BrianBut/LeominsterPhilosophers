@@ -30,8 +30,6 @@ class User(UserMixin, db.Model):
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
-        #print( 'user.email: ',self.email)
-        #print('LP_ADMIN: ',current_app.config['LP_ADMIN'])
         if self.email == current_app.config['LP_ADMIN']:
             self.admin=True
             self.moderator=True
@@ -63,6 +61,7 @@ class User(UserMixin, db.Model):
             )
         except:
             return False
+        print("confirming email: ", email, "against ", self.email )
         if email != self.email:
             return False
         self.confirmed = True
