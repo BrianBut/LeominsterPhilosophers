@@ -79,9 +79,9 @@ def register():
 @auth.route('/confirm/<token>')
 @login_required
 def confirm(token):
-    print('Confirm token recieved')
+    #print('Confirm token recieved')
     if current_user.confirmed:
-        print('Confirm token not needed as current_user is already confirmed')
+        #print('Confirm token not needed as current_user is already confirmed')
         return redirect(url_for('main.index'))
     if current_user.confirm(token):
         db.session.commit()
