@@ -26,6 +26,7 @@ set confirm flag on user after confirmation
 Membership now confirmed on login OK
 TODO Messages relating to above OK
 
+Reenable email for confirmation on server - internal server error
 
 
 
