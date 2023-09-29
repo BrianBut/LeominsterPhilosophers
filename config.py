@@ -2,11 +2,11 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
+    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
     LP_ADMIN = os.environ.get('LP_ADMIN')
     LP_MAIL_SUBJECT_PREFIX = os.environ.get('LP_MAIL_SUBJECT_PREFIX')
     LP_MAIL_SENDER = os.environ.get('LP_MAIL_SENDER')
-
     MAIL_SERVER = 'smtp.gmail.com'
     MAIL_PORT = 587
     MAIL_USE_TLS = True
