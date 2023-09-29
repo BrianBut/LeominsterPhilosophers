@@ -1,31 +1,34 @@
-### Installation 
-## Create a virtual envelope 
+## Installation 
+### Create a virtual envelope 
 python3 -m venv .venv
 
-## Activate the virtual envelope
+### Activate the virtual envelope
 source .venv/bin/activate
 
-## Install requirements
+### Install requirements
 cd leominsterphilosopers 
+
 pip3 install -r requirements
 
-## Create the database
+### Create the database
 flask --app lp shell 
-db.drop_all() 
+
+db.drop_all()
+
 db.create_all()
 
-## Test using unit_tests
+### Test using unit_tests
 flask --app lp test
 
-## Run
+### Run
 flask --app lp run --debug
 
-## Using flask-migrate
-## Create a migration repository
+### Using flask-migrate
+### Create a migration repository
 flask db init
-## Perform the initial migration
+### Perform the initial migration
 flask db migrate -m "Initial migration."
-## Apply the changes
+### Apply the changes
 flask db upgrade
-## Help
+### Help
 flask db --help
