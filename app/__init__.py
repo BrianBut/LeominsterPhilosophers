@@ -7,7 +7,6 @@ from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
-#import config_production as config
 import config as config
 
 bootstrap = Bootstrap5()
@@ -27,7 +26,6 @@ def create_app(test_config=None):
         SQLALCHEMY_DATABASE_URI= 'sqlite:///app.db',
         SECURITY_PASSWORD_SALT ="very-important"
     )
-    #app.config.from_object(config("APP_SETTINGS"))
 
     if test_config == 'testing':
         app.config.from_mapping(
@@ -39,7 +37,6 @@ def create_app(test_config=None):
 
     #print('config: ',app.config)
 
-    
     bcrypt = Bcrypt(app)
 
     db.init_app(app)
