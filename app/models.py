@@ -67,7 +67,7 @@ class User(UserMixin, db.Model):
             )
         except:
             return False
-        print("confirming email: ", email, "against ", self.email )
+        #print("confirming email: ", email, "against ", self.email )
         if email != self.email:
             return False
         self.confirmed = True
@@ -81,7 +81,7 @@ class User(UserMixin, db.Model):
     @staticmethod
     def reset_password(token, new_password, expiration=3600):
         serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
-        print("token is: ",token)
+        #print("token is: ",token)
         try:
             id = serializer.loads(
                 token,
@@ -91,9 +91,9 @@ class User(UserMixin, db.Model):
         except:
             return False
         
-        print("id is:", id)
+        #print("id is:", id)
         user = User.query.get(id)
-        print("user: ",user.id)
+        #print("user: ",user.id)
         if user.id is None:
             return False
         user.password = new_password

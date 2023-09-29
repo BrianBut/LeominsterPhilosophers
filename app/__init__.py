@@ -8,7 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
 #import config_production as config
-import config_development as config
+import config as config
 
 bootstrap = Bootstrap5()
 mail = Mail()
