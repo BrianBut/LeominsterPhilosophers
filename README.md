@@ -6,12 +6,12 @@ python3 -m venv .venv
 source .venv/bin/activate
 
 ## Install requirements
-cd leominsterphilosopers
+cd leominsterphilosopers 
 pip3 install -r requirements
 
 ## Create the database
-flask --app lp shell
-db.drop_all()
+flask --app lp shell 
+db.drop_all() 
 db.create_all()
 
 ## Test using unit_tests
@@ -21,11 +21,11 @@ flask --app lp test
 flask --app lp run --debug
 
 ## Using flask-migrate
-# Create a migration repository
+## Create a migration repository
 flask db init
-# Perform the initial migration
+## Perform the initial migration
 flask db migrate -m "Initial migration."
-# Apply the changes
+## Apply the changes
 flask db upgrade
-# Help
+## Help
 flask db --help
