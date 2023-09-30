@@ -79,9 +79,6 @@ def newtopic():
 @main.route('/edittopic/<int:id>', methods=['GET','POST'])
 @login_required
 def edittopic(id):
-    if not current_user.has_valid_profile() and not current_user.is_administrator():
-        flash(category='Danger', message='You must complete your profile (so we can see who is proposing a new topic)')
-        return redirect( url_for('main.edit_profile'))
     topic=Topic.query.get_or_404(id)
     if topic.discussion_venue() in ['proposed','online']:
         assert( topic.discussion_venue() in ['proposed','online'])

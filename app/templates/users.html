@@ -7,7 +7,7 @@
       <tr>
         <th>id</th>
         <th scope="col">full name</th>
-        <th scope="col">role</th>
+        <th scope="col">moderator</th>
         <th scope="col">confirmed</th>
         <th scope="col">last_seen</th>
         <th scope="col"></th>
@@ -18,7 +18,7 @@
     <tbody>
       <td>{{ user.id }}</td>
       <td>{{ "{} {}".format(user.first_name, user.last_name) }}</td>
-      <td>{{ user.role.name }}</td>
+      <td>{{ user.moderator }}</td>
       <td>{{ user.confirmed }}</td>
       <td>{{ user.last_seen }}</td>
       <td>

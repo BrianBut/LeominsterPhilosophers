@@ -38,11 +38,11 @@ def login():
                 #print("User is on the maillist")
                 user.member = True
             else:
-                #print("User is not on the maillist")
+                print("User is not on the maillist")
                 flash(category='Info', message='Welcome as a guest. You can read what other users have written, but you cannot comment or propose a topic until you are on the mailing list of our philosopy group')
             #print('user.member: ',user.member)
-            if user.member != member_status1:
-                flash(category='Warning', message='You are no longer on our membership list')
+            #if user.member != member_status1:
+            #    flash(category='Warning', message='You are no longer on our membership list')
             db.session.add(user)
             #db.session.commit()
             next = request.args.get('next')
@@ -79,9 +79,9 @@ def register():
 @auth.route('/confirm/<token>')
 @login_required
 def confirm(token):
-    #print('Confirm token recieved')
+    print('Confirm token recieved')
     if current_user.confirmed:
-        #print('Confirm token not needed as current_user is already confirmed')
+        print('Confirm token not needed as current_user is already confirmed')
         return redirect(url_for('main.index'))
     if current_user.confirm(token):
         db.session.commit()
