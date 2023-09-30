@@ -42,5 +42,6 @@ nosetests.xml
 # Virtual environment
 venv
 
-# Instance
+# Instance and Config
 instance
+config_prod
