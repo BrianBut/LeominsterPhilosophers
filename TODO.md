@@ -28,5 +28,9 @@ TODO Messages relating to above OK
 
 Reenable email for confirmation on server - internal server error (app.config['LP_MAIL_SUBJECT_PREFIX'])
 
+30th September. As there are issues with deployment revert to seperate configurations for development and server. Avoid using environmental variables
+No flash messages for failed login good! it thwarts dos attacks
+
+
 
 
