@@ -45,3 +45,4 @@ venv
 # Instance and Config
 instance
 config_prod
+config_dev
