@@ -31,6 +31,5 @@ Reenable email for confirmation on server - internal server error (app.config['L
 30th September. As there are issues with deployment revert to seperate configurations for development and server. Avoid using environmental variables
 No flash messages for failed login good! it thwarts dos attacks
 
-
-
-
+1st October. Add config to README
+Discovered threading does not work on pythonanywhere so changed email.
